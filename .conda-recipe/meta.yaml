@@ -1,0 +1,33 @@
+package:
+  name: simservice
+  version: 0.0.0
+
+about:
+  home: https://github.com/tjsego/simservice
+  license: MIT
+  license_file: ../LICENSE
+  summary: A library for building simulation services in Python
+
+extra:
+  maintainers: T.J. Sego
+
+source:
+  path: ../
+
+build:
+  number: 0
+  noarch: python
+  include_recipe: False
+  script: python setup.py install --single-version-externally-managed --record=record.txt
+
+requirements:
+  host:
+    - python >=3.6
+    - setuptools
+
+  run:
+    - python >=3.6
+
+test:
+  imports:
+    - simservice
