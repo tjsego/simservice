@@ -1,4 +1,11 @@
+"""
+simservice
+-----------
+
+A library for building simulation services in Python.
+
 MIT License
+-----------
 
 Copyright (c) 2021 T.J. Sego, Ph.D.
 
@@ -19,3 +26,23 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+"""
+
+# Access for customizing a service proxy interface on the fly by a service
+from .ServiceFunctionRegistry import service_function
+
+version_major = 0
+version_minor = 0
+version_patch = 0
+
+__version__ = f'{version_major}.{version_minor}.{version_patch}'
+
+
+def close():
+    """
+    Closes module managers
+
+    :return: None
+    """
+    from .managers import close_services
+    close_services()
