@@ -1,7 +1,8 @@
 import os
 from setuptools import setup
 
-__version__ = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'VERSION.txt')).readline().strip()
+__version__ = open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                'simservice', 'VERSION.txt')).readline().strip()
 
 setup(
     name='simservice',
@@ -26,7 +27,7 @@ setup(
         'Programming Language :: Python :: 3.9'
     ],
     packages=['simservice'],
-    package_dir={'simservice': '.'},
+    package_dir={'simservice': 'simservice'},
     python_requires='>=3.6',
-    package_data={'simservice': ['LICENSE', 'VERSION.txt']}
+    package_data={'simservice': ['../LICENSE', 'VERSION.txt']}
 )
