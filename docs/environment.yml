@@ -1,0 +1,9 @@
+name: simservice-docs
+channels:
+  - conda-forge
+  - tjsego
+dependencies:
+  - python=3.7
+  - simservice
+  - sphinx
+  - sphinx_rtd_theme

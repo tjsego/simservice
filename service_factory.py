@@ -14,7 +14,7 @@ def connect_properties(_client_process, _server_wrap_class) -> None:
     Wrapped service class should present a list of properties via a method *_property_names()* and corresponding
     getter and setter methods.
 
-    E.g., for p in cls._property_names(), cls.get_p() and cls.set_p() are defined
+    E.g., for ``p`` in ``cls._property_names()``, ``cls.get_p()`` and ``cls.set_p()`` are defined
 
     :param _client_process: client-side service proxy instance
     :param _server_wrap_class: server-side wrapped service class

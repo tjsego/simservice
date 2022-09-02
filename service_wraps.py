@@ -13,7 +13,8 @@ def proxy_function_factory(_cmd: str, _conn) -> functools.partial:
     """
     Service proxy dispatcher function factory
 
-    Generated function goes on client proxy wrap and dispatches commands to service ProcessContainer instance
+    Generated function goes on client proxy wrap and dispatches commands to service
+    :class:`ProcessContainer <simservice.service_containers.ProcessContainer>` instance
 
     :param _cmd: function name defined on server-side service wrap
     :type _cmd: str

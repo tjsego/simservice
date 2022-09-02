@@ -77,20 +77,26 @@ def service_function(func: Callable, function_name: str = None):
     This can be used within service specification to make an internal method available as a method on a
     client-side service proxy
 
-    E.g., if MyServiceWrap defines a service wrap, the underlying service of which makes the following specification
+    E.g., if ``MyServiceWrap`` defines a service wrap, the underlying service of which makes the following specification
 
-    def f():
-        print("Hello from the server side!")
+    .. code-block:: python
 
-    Then f() can be made available on a proxy of the service on the client side by declaring inside the service,
+        def f():
+            print("Hello from the server side!")
 
-    service_function(f)
+    Then ``f()`` can be made available on a proxy of the service on the client side by declaring inside the service,
+
+    .. code-block:: python
+
+        service_function(f)
 
     Then on the client side, the following can then be performed:
 
-    my_service = MyServiceWrap()
-    my_service.run()
-    my_service.f()
+    .. code-block:: python
+
+        my_service = MyServiceWrap()
+        my_service.run()
+        my_service.f()
 
     Note that the availability of a service function depends on the specification of the underlying service. At various
     stages of usage, a service may or may not have yet made a service function available.

@@ -23,6 +23,9 @@ class PySimService:
     Implementations should derive a wrap for an underlying service from this class
 
     Basic usage is
+
+    .. code-block:: python
+
         sim = PySimService()
         sim.run()
         sim.init()
@@ -32,14 +35,15 @@ class PySimService:
         sim.finish()
 
     Status reporting is as follows
-        sim = PySimService()          : sim.status -> SimStatus.REGISTERED
-        sim.run()                     : sim.status -> SimStatus.SIM_LOADED
-        sim.init()                    : sim.status -> SimStatus.SIM_INITIALIZED
-        sim.start()                   : sim.status -> SimStatus.SIM_STARTED
-        sim.step()                    : sim.status -> SimStatus.SIM_RUNNING
-        sim.finish()                  : sim.status -> SimStatus.SIM_FINISHED
-        sim.stop()                    : sim.status -> SimStatus.SIM_STOPPED
-        sim.stop(terminate_sim=False) : sim.status -> SimStatus.SIM_FINISHED
+
+    - sim = PySimService()          : sim.status -> SimStatus.REGISTERED
+    - sim.run()                     : sim.status -> SimStatus.SIM_LOADED
+    - sim.init()                    : sim.status -> SimStatus.SIM_INITIALIZED
+    - sim.start()                   : sim.status -> SimStatus.SIM_STARTED
+    - sim.step()                    : sim.status -> SimStatus.SIM_RUNNING
+    - sim.finish()                  : sim.status -> SimStatus.SIM_FINISHED
+    - sim.stop()                    : sim.status -> SimStatus.SIM_STOPPED
+    - sim.stop(terminate_sim=False) : sim.status -> SimStatus.SIM_FINISHED
 
     """
     def __init__(self, sim_name: str = '', *args, **kwargs):
@@ -102,7 +106,7 @@ class PySimService:
         Called inside run; this supports parallel applications
 
         To support running a service in parallel, overload this or set it
-        via set_inside_run with what to do when this service acts without
+        via :meth:`set_inside_run` with what to do when this service acts without
         further control from the calling process
 
         :param self: this service instance
@@ -202,7 +206,7 @@ class PySimService:
 
     def _run(self) -> None:
         """
-        Called by run; all prep for the underlying simulation is complete after this call!
+        Called by :meth:`run`; all prep for the underlying simulation is complete after this call!
 
         :return: None
         """
@@ -210,16 +214,16 @@ class PySimService:
 
     def _init(self) -> bool:
         """
-        Called by init; initialize underlying simulation
+        Called by :meth:`init`; initialize underlying simulation
 
-        :return: True if started; False if further start calls are required
+        :return: True if started; False if further init calls are required
         :rtype: bool
         """
         raise NotImplementedError
 
     def _start(self) -> bool:
         """
-        Called by start; after simulation and before stepping
+        Called by :meth:`start`; after simulation and before stepping
 
         Should set self.beginning_step to first first step of current_step counter
 
@@ -230,7 +234,7 @@ class PySimService:
 
     def _step(self) -> bool:
         """
-        Called by step; execute a step of the underlying simulation
+        Called by :meth:`step`; execute a step of the underlying simulation
 
         :return: True if successful, False if something failed
         :rtype: bool
@@ -239,7 +243,7 @@ class PySimService:
 
     def _finish(self) -> None:
         """
-        Called by finish; execute underlying simulation finish
+        Called by :meth:`finish`; execute underlying simulation finish
 
         :return: None
         """
