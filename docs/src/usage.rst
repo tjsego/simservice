@@ -71,12 +71,12 @@ their underlying functions of the same name,
 
 SimService :class:`proxies <simservice.PySimService.PySimService>` support serialization
 and so can be attached to, and executed in, separate processes, whether as single,
-background processes or in batch execution. :class:`<simservice.PySimService.PySimService>`
+background processes or in batch execution. :class:`PySimService <simservice.PySimService.PySimService>`
 provides a method :meth:`inside_run <simservice.PySimService.PySimService.inside_run>`
 that takes a Python function as argument, where the function defines instructions for
 execution of a proxy that is passed as argument. This functionality gives end-users the
 ability to prescribe execution instructions to be carried out by a
-:class:`proxies <simservice.PySimService.PySimService>` when
+:class:`proxy <simservice.PySimService.PySimService>` when
 :class:`PySimService.run <simservice.PySimService.PySimService.run>` is called
 (*e.g.*, by a process that they define).
 For example, suppose an end-user wishes to execute a batch of ``RandomWalker`` simulations
@@ -92,17 +92,17 @@ underlying data are still valid and accessible,
 
     def inside_run(proxy_inst):
         """Function for parallel execution"""
-        random_walker_proxy.init()
-        random_walker_proxy.start()
+        proxy_inst.init()
+        proxy_inst.start()
         for _ in range(100):
-            random_walker_proxy.step()
+            proxy_inst.step()
             # Impose periodic boundary conditions on a domain [-1, 1]
-            pos = random_walker_proxy.get_pos()
+            pos = proxy_inst.get_pos()
             if pos < -1.0:
-                random_walker_proxy.set_pos(pos + 2.0)
+                proxy_inst.set_pos(pos + 2.0)
             elif pos > 1.0:
-                random_walker_proxy.set_pos(pos - 2.0)
-        random_walker_proxy.finish()
+                proxy_inst.set_pos(pos - 2.0)
+        proxy_inst.finish()
 
     # Create a set of proxies to simulate in parallel according to instructions defined in inside_run
     random_walker_proxies = []
