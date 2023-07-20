@@ -67,3 +67,9 @@ _______________________
 
 .. automodule:: simservice.ServiceFunctionRegistry
    :members:
+
+utils
+-----
+
+.. automodule:: simservice.utils
+   :members:

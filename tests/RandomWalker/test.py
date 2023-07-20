@@ -18,3 +18,6 @@ class RandomWalkerTestCase(unittest.TestCase):
 
     def test_multi_run_inside(self):
         RandomWalkerUser.multi_run_inside()
+
+    def test_multi_run_nondaemonic(self):
+        RandomWalkerUser.multi_run_nondaemonic()
