@@ -1,10 +1,14 @@
 """
 Defines structures for connecting service functions
 """
+import logging
 from threading import Thread
 from typing import Dict
 
 from .messages import safe_transmit
+
+
+logger = logging.getLogger(__name__)
 
 
 class _ServiceFunctionContainer:
@@ -162,6 +166,6 @@ class ServiceFunctionReceiver:
             msg = conn.recv()  # ServiceFunctionConnectionMessage
             process_name, function_name, evaluator = msg()
             if process_name != service_name:
-                print(f"Incorrect pipe usage {process_name} -> {service_name}. Rejecting")
+                logger.warning(f"Incorrect pipe usage {process_name} -> {service_name}. Rejecting")
                 continue
             cls.service_containers[service_name][cls.KEY_CONT]._register_function(function_name, evaluator)

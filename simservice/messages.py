@@ -1,9 +1,13 @@
 """
 Defines messages and inter-process message-passing structures
 """
+import logging
 from multiprocessing.connection import Pipe
 from threading import Thread
 from typing import Any, Callable, Tuple
+
+
+logger = logging.getLogger(__name__)
 
 
 class Functor:
@@ -122,26 +126,24 @@ def worker_transmit(conn, func) -> None:
             conn.send(val)
 
 
-def safe_transmit(conn=None, debug: bool = False) -> Callable:
+def safe_transmit(conn=None) -> Callable:
     """
     Wrap to do communication protocol with safe handling of common exceptions
 
     :param conn: connection
     :type conn: multiprocessing.connection.Connection or None; default None
-    :param debug: option for notifications when pipes break or close; default False
-    :type debug: bool
     :return: function wrapper
     """
     def wrapper(func, *args, **kwargs):
         try:
             return func(*args, **kwargs)
         except BrokenPipeError:
-            if debug and conn is not None:
-                print(f"Pipe has been broken: {conn}")
+            if conn is not None:
+                logger.warning(f"Pipe has been broken: {conn}")
             return None
         except EOFError:
-            if debug and conn is not None:
-                print(f"Pipe has been closed: {conn}")
+            if conn is not None:
+                logger.warning(f"Pipe has been closed: {conn}")
             return None
     return wrapper
 
