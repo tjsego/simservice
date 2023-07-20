@@ -30,6 +30,7 @@ SOFTWARE.
 
 # Access for customizing a service proxy interface on the fly by a service
 from .ServiceFunctionRegistry import service_function
+from .utils import ExecutionContext
 import os
 
 __version__ = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'VERSION.txt')).readline().strip()
