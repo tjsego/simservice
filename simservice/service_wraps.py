@@ -3,10 +3,14 @@ Defines service wraps
 """
 import functools
 from inspect import getmembers, isfunction
+import logging
 from multiprocessing import Pipe
 
 from .messages import dispatch_terminate, dispatch_transmit
 from .service_containers import ProcessContainer
+
+
+logger = logging.getLogger(__name__)
 
 
 def proxy_function_factory(_cmd: str, _conn) -> functools.partial:
@@ -74,7 +78,7 @@ class TypeProcessWrap:
                  *args, **kwargs):
         assert self._process_cls is not None
 
-        print(f"Launching service {self._process_cls}...")
+        logger.info(f"Launching service {self._process_cls}...")
 
         manager_conn, container_conn = Pipe()
 
@@ -100,7 +104,7 @@ class TypeProcessWrap:
         # Wait for launch confirmation with process id and service function connection
         self._process_name, sfunc_receiver_conn = self._conn.recv()
 
-        print(f"Service launched: {self._process_cls}")
+        logger.info(f"Service launched: {self._process_cls}")
 
         _return_conn.send((self._process_name, self._conn, sfunc_receiver_conn))
 
@@ -111,10 +115,10 @@ class TypeProcessWrap:
         """Closes the proxy"""
         if not self._conn.closed:
             # Send terminator and wait for container response before going to garbage
-            print(f"Closing service {self._process_cls}...")
+            logger.info(f"Closing service {self._process_cls}...")
             dispatch_terminate(self._conn)
             self._conn.close()
-            print(f"Service closed: {self._process_cls}")
+            logger.info(f"Service closed: {self._process_cls}")
 
     @classmethod
     def _native_names(cls):

@@ -1,9 +1,13 @@
 """
 Defines the service function interface
 """
+import logging
 from typing import Callable, Optional
 
 from .messages import ServiceFunctionConnectionMessage, remote_function_factory
+
+
+logger = logging.getLogger(__name__)
 
 
 class NotAServiceError(Exception):
@@ -113,4 +117,4 @@ def service_function(func: Callable, function_name: str = None):
     try:
         ServiceFunctionRegistry.register_function(func, function_name)
     except NotAServiceError:
-        print(f"Service functions can only be registered in a service environment ({func}, {function_name})")
+        logger.warning(f"Service functions can only be registered in a service environment ({func}, {function_name})")
