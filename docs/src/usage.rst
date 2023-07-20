@@ -68,6 +68,27 @@ their underlying functions of the same name,
         elif pos > 1.0:
             random_walker_proxy.set_pos(pos - 2.0)
     random_walker_proxy.finish()
+    random_walker_proxy.close()
+
+For applications that do not require fine-grained control of simulation stages (*e.g.*, ``run``, ``finish``),
+SimService provides the :class:`ExecutionContext <simservice.ExecutionContext>` to eliminate mundane code,
+
+.. code-block:: python
+    """
+    RandomWalkerUser.py alternative that uses ExecutionContext
+    """
+    from simservice import ExecutionContext
+
+    random_walker_proxy = service_random_walker()
+    with ExecutionContext(random_walker_proxy):
+        for _ in range(100):
+            random_walker_proxy.step()
+            # Impose periodic boundary conditions on a domain [-1, 1] using service functions
+            pos = random_walker_proxy.get_pos()
+            if pos < -1.0:
+                random_walker_proxy.set_pos(pos + 2.0)
+            elif pos > 1.0:
+                random_walker_proxy.set_pos(pos - 2.0)
 
 SimService :class:`proxies <simservice.PySimService.PySimService>` support serialization
 and so can be attached to, and executed in, separate processes, whether as single,

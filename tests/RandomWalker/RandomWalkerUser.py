@@ -1,29 +1,27 @@
 from RandomWalkerFactory import random_walker_simservice
 from multiprocessing import Pool
+from simservice import ExecutionContext
 from simservice.utils import NonDaemonicPool
 from statistics import mean, stdev
 
 
 def _execute(random_walker_proxy):
-    random_walker_proxy.init()
-    random_walker_proxy.start()
-    for i in range(100):
-        random_walker_proxy.step()
-        # Impose periodic boundary conditions on a domain [-1, 1] using service functions
-        pos = random_walker_proxy.get_pos()
-        if pos < -1.0:
-            random_walker_proxy.set_pos(pos + 2.0)
-        elif pos > 1.0:
-            random_walker_proxy.set_pos(pos - 2.0)
-    random_walker_proxy.finish()
+    with ExecutionContext(random_walker_proxy, run=False, close=False):
+        for i in range(100):
+            random_walker_proxy.step()
+            # Impose periodic boundary conditions on a domain [-1, 1] using service functions
+            pos = random_walker_proxy.get_pos()
+            if pos < -1.0:
+                random_walker_proxy.set_pos(pos + 2.0)
+            elif pos > 1.0:
+                random_walker_proxy.set_pos(pos - 2.0)
     return random_walker_proxy.get_pos()
 
 
 def single_run():
     w = random_walker_simservice()
-    w.run()
-    result = _execute(w)
-    w.close()
+    with ExecutionContext(w):
+        result = _execute(w)
     return result
 
 
@@ -52,6 +50,7 @@ def multi_run_inside(num_insts: int = 8, num_workers: int = 8):
 
 def _inst_execute(_):
     w = random_walker_simservice()
+    w.run()
     result = _execute(w)
     w.close()
     return result
