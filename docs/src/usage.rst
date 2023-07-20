@@ -68,7 +68,6 @@ their underlying functions of the same name,
         elif pos > 1.0:
             random_walker_proxy.set_pos(pos - 2.0)
     random_walker_proxy.finish()
-    random_walker_proxy.close()
 
 For applications that do not require fine-grained control of simulation stages (*e.g.*, ``run``, ``finish``),
 SimService provides the :class:`ExecutionContext <simservice.ExecutionContext>` to eliminate mundane code,
@@ -107,9 +106,10 @@ executes each of a list of ``RandomWalker``
 The end-user can define a function ``inside_run`` that carries out their simulation on
 a ``RandomWalker`` :class:`proxy <simservice.PySimService.PySimService>` and set it on
 each instance before batch execution. After execution, references to each instance and all
-underlying data are still valid and accessible,
+underlying data are still valid and accessible until passed to :func:`close_service <sim_service.service_function>`,
 
 .. code-block:: python
+    from simservice import close_service
 
     def inside_run(proxy_inst):
         """Function for parallel execution"""
@@ -136,6 +136,13 @@ underlying data are still valid and accessible,
     # Calculate the mean final position
     final_positions = [rwp.get_pos() for rwp in random_walker_proxies]
     mean_position = sum(final_positions) / len(final_positions)
+    # Close all services to free memory
+    [close_service(rwp) for rwp in random_walker_proxies]
+
+.. note::
+
+    Calling :func:`close_service <sim_service.service_function>` on services is especially important when using
+    lots of proxies over the lifetime of a program to prevent unnecessary memory usage.
 
 Note that the Python ``multiprocessing.Pool`` does not allow creating processes from within created
 processes by default, which makes creating proxies in parallel illegal.

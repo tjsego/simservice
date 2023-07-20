@@ -4,6 +4,8 @@ Defines utility features
 from contextlib import AbstractContextManager
 import multiprocessing.pool
 
+from .service_factory import close_service
+
 
 class NonDaemonicProcess(multiprocessing.Process):
     """
@@ -56,5 +58,5 @@ class ExecutionContext(AbstractContextManager):
         if self._flag_finish:
             self._proxy.finish()
         if self._flag_close:
-            self._proxy.close()
+            close_service(self._proxy)
         return super().__exit__(_exc_type, _exc_value, _traceback)

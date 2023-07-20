@@ -117,6 +117,7 @@ class TypeProcessWrap:
             # Send terminator and wait for container response before going to garbage
             logger.info(f"Closing service {self._process_cls}...")
             dispatch_terminate(self._conn)
+            self._container.terminate()
             self._conn.close()
             logger.info(f"Service closed: {self._process_cls}")
 
