@@ -1,6 +1,6 @@
 from RandomWalkerFactory import random_walker_simservice
 from multiprocessing import Pool
-from simservice import ExecutionContext
+from simservice import ExecutionContext, close_service
 from simservice.utils import NonDaemonicPool
 from statistics import mean, stdev
 
@@ -30,7 +30,7 @@ def multi_run(num_insts: int = 8, num_workers: int = 8):
     [w.run() for w in rws]
     with Pool(num_workers) as pool:
         result = pool.map(_execute, rws)
-    [w.close() for w in rws]
+    [close_service(w) for w in rws]
     return result
 
 
@@ -44,7 +44,7 @@ def multi_run_inside(num_insts: int = 8, num_workers: int = 8):
     with Pool(num_workers) as pool:
         pool.map(_run, rws)
     result = [w.get_pos() for w in rws]
-    [w.close() for w in rws]
+    [close_service(w) for w in rws]
     return result
 
 
@@ -52,7 +52,7 @@ def _inst_execute(_):
     w = random_walker_simservice()
     w.run()
     result = _execute(w)
-    w.close()
+    close_service(w)
     return result
 
 

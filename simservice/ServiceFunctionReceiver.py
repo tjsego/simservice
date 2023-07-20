@@ -64,10 +64,11 @@ class _ServiceFunctionConnectionWorker(Thread):
         self._attr_adder = _attr_adder
 
         self._added_functions = list()
+        self.kill = False
 
     def run(self) -> None:
         """Runs the worker"""
-        while safe_transmit()(self._check_connection) is not None:
+        while safe_transmit()(self._check_connection) is not None and not self.kill:
             continue
 
     def _check_connection(self):
@@ -150,6 +151,21 @@ class ServiceFunctionReceiver:
                                                   _attr_adder)
         worker.start()
         cls.workers[service_name] = worker
+
+    @classmethod
+    def disconnect_service(cls, service_proxy) -> None:
+        """
+        Remove a service from the receiver.
+
+        :param service_proxy: service proxy instance
+        :return: None
+        """
+        service_name = service_proxy.process_name()
+        w = cls.workers.pop(service_name)
+        w.kill = True
+        while w.is_alive():
+            pass
+        cls.service_containers.pop(service_name)
 
     @classmethod
     def _flush_connection(cls, service_name: str) -> None:

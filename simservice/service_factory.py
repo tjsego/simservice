@@ -70,6 +70,17 @@ def get_proxy_by_process_name(_process_name: str):
     return process_registry[_process_name]
 
 
+def close_service(_s) -> None:
+    """
+    Closes a service completely
+
+    :param _s: service proxy
+    """
+    _s.close()
+    del process_registry[_s.process_name()]
+    ServiceFunctionReceiver.disconnect_service(_s)
+
+
 def process_factory(_service_name: str, *args, **kwargs):
     """
     Main template service process proxy generator for local services

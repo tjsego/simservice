@@ -12,6 +12,8 @@ SimService API
 
 .. autofunction:: service_function
 
+.. autofunction:: close_service
+
 .. autoclass:: ExecutionContext
 
 .. autofunction:: close

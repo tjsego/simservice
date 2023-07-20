@@ -30,6 +30,7 @@ SOFTWARE.
 
 # Access for customizing a service proxy interface on the fly by a service
 from .ServiceFunctionRegistry import service_function
+from .service_factory import close_service
 from .utils import ExecutionContext
 import os
 
