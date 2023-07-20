@@ -115,3 +115,24 @@ underlying data are still valid and accessible,
     # Calculate the mean final position
     final_positions = [rwp.get_pos() for rwp in random_walker_proxies]
     mean_position = sum(final_positions) / len(final_positions)
+
+Note that the Python ``multiprocessing.Pool`` does not allow creating processes from within created
+processes by default, which makes creating proxies in parallel illegal.
+SimService provides :class:`NonDaemonicPool <simservice.utils.NonDaemonicPool>`,
+a customized version of ``multiprocessing.Pool``, that permits
+creating services during parallel execution,
+
+.. code-block:: python
+
+    from simservice.utils import NonDaemonicPool
+
+    def instantiate_and_run(_):
+        """Creates and executes a service and returns the result"""
+        proxy_inst = service_random_walker()
+        proxy_inst.set_inside_run(inside_run)
+        proxy_inst.run()
+        return proxy_inst.get_pos()
+
+    with NonDaemonicPool(8) as pool:
+        final_positions = poolmap(instantiate_and_run, [None] * 80)
+    mean_position = sum(final_positions) / len(final_positions)

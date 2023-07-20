@@ -1,5 +1,6 @@
 from RandomWalkerFactory import random_walker_simservice
 from multiprocessing import Pool
+from simservice.utils import NonDaemonicPool
 from statistics import mean, stdev
 
 
@@ -49,6 +50,19 @@ def multi_run_inside(num_insts: int = 8, num_workers: int = 8):
     return result
 
 
+def _inst_execute(_):
+    w = random_walker_simservice()
+    result = _execute(w)
+    w.close()
+    return result
+
+
+def multi_run_nondaemonic(num_insts: int = 8, num_workers: int = 8):
+    with NonDaemonicPool(num_workers) as pool:
+        result = pool.map(_inst_execute, [None] * num_insts)
+    return result
+
+
 if __name__ == '__main__':
     print('==========')
     print('Single run')
@@ -68,3 +82,10 @@ if __name__ == '__main__':
     multi_run_results = multi_run_inside()
     print('Final position mean    :', mean(multi_run_results))
     print('Final position st. dev.:', stdev(multi_run_results))
+
+    print('========================')
+    print('Multi run (non-daemonic)')
+    print('========================')
+    multi_run_nondaemonic_results = multi_run_nondaemonic()
+    print('Final position mean    :', mean(multi_run_nondaemonic_results))
+    print('Final position st. dev.:', stdev(multi_run_nondaemonic_results))
