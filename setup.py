@@ -10,7 +10,7 @@ setup(
     description='A library for building simulation services in Python',
     url='https://github.com/tjsego/simservice',
     author='T.J. Sego',
-    author_email='tjsego@iu.edu',
+    author_email='timothy.sego@medicine.ufl.edu',
     license='MIT',
     classifiers=[
         'Development Status :: 3 - Alpha',

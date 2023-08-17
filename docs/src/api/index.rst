@@ -6,7 +6,7 @@ SimService API
 .. module:: simservice
    :synopsis: A library for building simulation services in Python
 
-.. moduleauthor:: T.J. Sego <tjsego@iu.edu>
+.. moduleauthor:: T.J. Sego <timothy.sego@medicine.ufl.edu>
 
 .. currentmodule:: simservice
 
