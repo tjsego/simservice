@@ -69,7 +69,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'SimService'
-copyright = '2022 T.J. Sego'
+copyright = '2022, 2023 T.J. Sego'
 author = 'T.J. Sego'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -267,7 +267,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'SimService.tex', 'SimService Documentation',
-     'T.J. Sego, Andy Somogyi, James A. Glazier, Herbert Sauro', 'manual'),
+     'T.J. Sego', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
