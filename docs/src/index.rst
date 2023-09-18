@@ -19,3 +19,4 @@ implementation, as well as dynamically in the specification of a simulation.
    implementation
    usage
    api/index
+   history
