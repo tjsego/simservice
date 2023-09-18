@@ -69,6 +69,26 @@ their underlying functions of the same name,
             random_walker_proxy.set_pos(pos - 2.0)
     random_walker_proxy.finish()
 
+For applications that do not require fine-grained control of simulation stages (*e.g.*, ``run``, ``finish``),
+SimService provides the :class:`ExecutionContext <simservice.ExecutionContext>` to eliminate mundane code,
+
+.. code-block:: python
+    """
+    RandomWalkerUser.py alternative that uses ExecutionContext
+    """
+    from simservice import ExecutionContext
+
+    random_walker_proxy = service_random_walker()
+    with ExecutionContext(random_walker_proxy):
+        for _ in range(100):
+            random_walker_proxy.step()
+            # Impose periodic boundary conditions on a domain [-1, 1] using service functions
+            pos = random_walker_proxy.get_pos()
+            if pos < -1.0:
+                random_walker_proxy.set_pos(pos + 2.0)
+            elif pos > 1.0:
+                random_walker_proxy.set_pos(pos - 2.0)
+
 SimService :class:`proxies <simservice.PySimService.PySimService>` support serialization
 and so can be attached to, and executed in, separate processes, whether as single,
 background processes or in batch execution. :class:`PySimService <simservice.PySimService.PySimService>`
@@ -86,9 +106,10 @@ executes each of a list of ``RandomWalker``
 The end-user can define a function ``inside_run`` that carries out their simulation on
 a ``RandomWalker`` :class:`proxy <simservice.PySimService.PySimService>` and set it on
 each instance before batch execution. After execution, references to each instance and all
-underlying data are still valid and accessible,
+underlying data are still valid and accessible until passed to :func:`close_service <sim_service.service_function>`,
 
 .. code-block:: python
+    from simservice import close_service
 
     def inside_run(proxy_inst):
         """Function for parallel execution"""
@@ -114,4 +135,32 @@ underlying data are still valid and accessible,
     execute_in_parallel(random_walker_proxies)
     # Calculate the mean final position
     final_positions = [rwp.get_pos() for rwp in random_walker_proxies]
+    mean_position = sum(final_positions) / len(final_positions)
+    # Close all services to free memory
+    [close_service(rwp) for rwp in random_walker_proxies]
+
+.. note::
+
+    Calling :func:`close_service <sim_service.service_function>` on services is especially important when using
+    lots of proxies over the lifetime of a program to prevent unnecessary memory usage.
+
+Note that the Python ``multiprocessing.Pool`` does not allow creating processes from within created
+processes by default, which makes creating proxies in parallel illegal.
+SimService provides :class:`NonDaemonicPool <simservice.utils.NonDaemonicPool>`,
+a customized version of ``multiprocessing.Pool``, that permits
+creating services during parallel execution,
+
+.. code-block:: python
+
+    from simservice.utils import NonDaemonicPool
+
+    def instantiate_and_run(_):
+        """Creates and executes a service and returns the result"""
+        proxy_inst = service_random_walker()
+        proxy_inst.set_inside_run(inside_run)
+        proxy_inst.run()
+        return proxy_inst.get_pos()
+
+    with NonDaemonicPool(8) as pool:
+        final_positions = poolmap(instantiate_and_run, [None] * 80)
     mean_position = sum(final_positions) / len(final_positions)

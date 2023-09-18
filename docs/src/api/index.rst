@@ -6,11 +6,15 @@ SimService API
 .. module:: simservice
    :synopsis: A library for building simulation services in Python
 
-.. moduleauthor:: T.J. Sego <tjsego@iu.edu>
+.. moduleauthor:: T.J. Sego <timothy.sego@medicine.ufl.edu>
 
 .. currentmodule:: simservice
 
 .. autofunction:: service_function
+
+.. autofunction:: close_service
+
+.. autoclass:: ExecutionContext
 
 .. autofunction:: close
 
@@ -66,4 +70,10 @@ ServiceFunctionRegistry
 _______________________
 
 .. automodule:: simservice.ServiceFunctionRegistry
+   :members:
+
+utils
+-----
+
+.. automodule:: simservice.utils
    :members:

@@ -10,7 +10,7 @@ setup(
     description='A library for building simulation services in Python',
     url='https://github.com/tjsego/simservice',
     author='T.J. Sego',
-    author_email='tjsego@iu.edu',
+    author_email='timothy.sego@medicine.ufl.edu',
     license='MIT',
     classifiers=[
         'Development Status :: 3 - Alpha',
@@ -24,7 +24,8 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9'
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10'
     ],
     packages=['simservice'],
     package_dir={'simservice': 'simservice'},

@@ -7,7 +7,7 @@ A library for building simulation services in Python.
 MIT License
 -----------
 
-Copyright (c) 2022 T.J. Sego, Ph.D.
+Copyright (c) 2022, 2023 T.J. Sego, Ph.D.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,6 +30,8 @@ SOFTWARE.
 
 # Access for customizing a service proxy interface on the fly by a service
 from .ServiceFunctionRegistry import service_function
+from .service_factory import close_service
+from .utils import ExecutionContext
 import os
 
 __version__ = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'VERSION.txt')).readline().strip()

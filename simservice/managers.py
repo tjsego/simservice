@@ -1,8 +1,12 @@
 """
 Defines service managers
 """
+import logging
 from multiprocessing.managers import BaseManager
 from typing import Callable, Dict, Optional
+
+
+logger = logging.getLogger(__name__)
 
 
 class _ServiceManagerLocal(BaseManager):
@@ -34,7 +38,7 @@ class ServiceManagerLocal:
     def _on_demand_manager():
         if ServiceManagerLocal.manager is None:
             ServiceManagerLocal.manager = _ServiceManagerLocal()
-            print(f"Initialized service manager {ServiceManagerLocal.manager}")
+            logger.info(f"Initialized service manager {ServiceManagerLocal.manager}")
 
     @classmethod
     def start(cls, *args, **kwargs):

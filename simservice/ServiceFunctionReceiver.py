@@ -1,10 +1,14 @@
 """
 Defines structures for connecting service functions
 """
+import logging
 from threading import Thread
 from typing import Dict
 
 from .messages import safe_transmit
+
+
+logger = logging.getLogger(__name__)
 
 
 class _ServiceFunctionContainer:
@@ -60,10 +64,11 @@ class _ServiceFunctionConnectionWorker(Thread):
         self._attr_adder = _attr_adder
 
         self._added_functions = list()
+        self.kill = False
 
     def run(self) -> None:
         """Runs the worker"""
-        while safe_transmit()(self._check_connection) is not None:
+        while safe_transmit()(self._check_connection) is not None and not self.kill:
             continue
 
     def _check_connection(self):
@@ -148,6 +153,21 @@ class ServiceFunctionReceiver:
         cls.workers[service_name] = worker
 
     @classmethod
+    def disconnect_service(cls, service_proxy) -> None:
+        """
+        Remove a service from the receiver.
+
+        :param service_proxy: service proxy instance
+        :return: None
+        """
+        service_name = service_proxy.process_name()
+        w = cls.workers.pop(service_name)
+        w.kill = True
+        while w.is_alive():
+            pass
+        cls.service_containers.pop(service_name)
+
+    @classmethod
     def _flush_connection(cls, service_name: str) -> None:
         """
         Process all pending service function registrations in the Pipe of a service process
@@ -162,6 +182,6 @@ class ServiceFunctionReceiver:
             msg = conn.recv()  # ServiceFunctionConnectionMessage
             process_name, function_name, evaluator = msg()
             if process_name != service_name:
-                print(f"Incorrect pipe usage {process_name} -> {service_name}. Rejecting")
+                logger.warning(f"Incorrect pipe usage {process_name} -> {service_name}. Rejecting")
                 continue
             cls.service_containers[service_name][cls.KEY_CONT]._register_function(function_name, evaluator)
