@@ -1,6 +1,6 @@
-from RandomWalkerFactory import random_walker_simservice
+from RandomWalkerFactory import random_walker_simservice, SERVICE_NAME
 from multiprocessing import Pool
-from simservice import ExecutionContext, close_service
+from simservice import ExecutionContext, registered_services, close_service
 from simservice.utils import NonDaemonicPool
 from statistics import mean, stdev
 
@@ -16,6 +16,12 @@ def _execute(random_walker_proxy):
             elif pos > 1.0:
                 random_walker_proxy.set_pos(pos - 2.0)
     return random_walker_proxy.get_pos()
+
+
+def registry_check():
+    if SERVICE_NAME not in registered_services():
+        raise RuntimeError
+    return True
 
 
 def single_run():
@@ -63,6 +69,11 @@ def multi_run_nondaemonic(num_insts: int = 8, num_workers: int = 8):
 
 
 if __name__ == '__main__':
+    print('==============')
+    print('Registry check')
+    print('==============')
+    print('Registered service:', registry_check())
+
     print('==========')
     print('Single run')
     print('==========')
