@@ -1,5 +1,21 @@
 # SimService
 
+<p align=center>
+<img src="examples/ExplicitCell/explicit_cell_animation.gif">
+<br/>
+<em>
+Simulation of single cell motility with subcellular dynamics using 
+simulation services built with CompuCell3D and Tissue Forge. 
+Gray shaded regions show a medium according to CompuCell3D. 
+Tissue Forge particles represent subcellular components, where blue particles are segments of the cell membrane, 
+and red particles are parcels of fluid. 
+<br/>
+This example is available in the 
+<a href="examples">examples</a> directory 
+<a href="examples/ExplicitCell">ExplicitCell</a>.
+</em>
+</p>
+
 SimService is a library for building simulation services in Python.
 SimService is lightweight, written in pure Python and designed to generate
 memory-isolated, interactive proxy objects of simulations with minimal effort.
