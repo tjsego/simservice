@@ -10,6 +10,9 @@ import RandomWalkerUser
 
 class RandomWalkerTestCase(unittest.TestCase):
 
+    def test_registry_check(self):
+        RandomWalkerUser.registry_check()
+
     def test_single_run(self):
         RandomWalkerUser.single_run()
 
