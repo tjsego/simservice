@@ -81,6 +81,21 @@ def close_service(_s) -> None:
     ServiceFunctionReceiver.disconnect_service(_s)
 
 
+def registered_services():
+    """
+    Returns the list of registered services
+    """
+    manager_local = managers.ServiceManagerLocal
+    return list(manager_local.service_registry.keys()) + list(manager_local.function_registry.keys())
+
+
+def running_processes():
+    """
+    Returns the list of names of all known running processes
+    """
+    return list(process_registry._items.keys())
+
+
 def process_factory(_service_name: str, *args, **kwargs):
     """
     Main template service process proxy generator for local services
