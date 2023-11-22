@@ -3,6 +3,12 @@
 History
 ========
 
+Version 0.1.1
+-------------
+* Added functions to access information about module state
+* Added detailed example (ExplicitCell)
+* Minor fixes to docs
+
 Version 0.1.0
 --------------
 * Added tests
